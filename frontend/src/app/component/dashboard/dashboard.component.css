@@ -1,0 +1,28 @@
+.active-link {
+  color: white !important;
+  background-color: black !important;
+}
+
+.spinner {
+  @apply border-4 border-white rounded-full w-5 h-5 inline-block;
+  border-top-color: transparent;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.toast-container {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column-reverse; /* Newest toasts at the top */
+}

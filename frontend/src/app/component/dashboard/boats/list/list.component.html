@@ -1,0 +1,113 @@
+<header class="bg-white shadow">
+  <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+    <h1 class="text-3xl font-bold tracking-tight text-gray-900">Boats - List</h1>
+  </div>
+</header>
+<main>
+  <div class="ml-auto mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+    Please find the list of your boats below.
+  </div>
+  <div class="relative overflow-x-auto sm:rounded-lg mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+    <button (click)="openCreateModal()"
+            class="inline-flex items-center py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+            type="button">
+      <svg aria-hidden="true" class="w-6 h-6 text-gray-800 dark:text-white mr-2" fill="none"
+           viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9 1v16M1 9h16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      </svg>
+      Add a new boat
+    </button>
+
+    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+      <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+      <tr>
+        <th class="px-6 py-3 w-1/12" scope="col">
+          #
+        </th>
+        <th class="px-6 py-3 w-3/12" scope="col">
+          Name
+        </th>
+        <th class="px-6 py-3 w-5/12" scope="col">
+          Description
+        </th>
+        <th class="px-6 py-3 w-3/12" scope="col">
+          Action
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <ng-container *ngIf="boats$ | async as boats">
+        <ng-container *ngIf="boats.length > 0; else noBoats">
+          <tr *ngFor="let boat of boats$ | async">
+            <td class="px-6 py-4">
+              {{ boat.id }}
+            </td>
+            <th class="px-6 py-4" scope="row">
+              <div class="pl-3">
+                <div class="text-base font-semibold"><a (click)="openDetailsModal(boat)"
+                                                        [routerLink]="[]">{{ boat.name }}</a>
+                </div>
+              </div>
+            </th>
+            <td class="px-6 py-4">
+              {{ boat.description.length > 200 ? (boat.description | slice:0:200) + '...' : boat.description }}
+            </td>
+            <td class="px-6 py-4">
+              <button (click)="openUpdateModal(boat)"
+                      class="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                      type="button">
+                Update
+              </button>
+              <button (click)="deleteBoat(boat)"
+                      class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+                      type="button">
+                Delete
+              </button>
+            </td>
+          </tr>
+        </ng-container>
+        <ng-template #noBoats>
+          <tr>
+            <td class="text-center py-4" colspan="4">
+              You don't have any boats.
+            </td>
+          </tr>
+        </ng-template>
+      </ng-container>
+      </tbody>
+    </table>
+  </div>
+</main>
+
+<app-confirm-danger
+  (cancel)="onDeleteCancel()"
+  (confirm)="onDeleteConfirm()"
+  *ngIf="showConfirmDialog"
+  [message]="confirmMessage"
+  [show]="showConfirmDialog"
+>
+</app-confirm-danger>
+
+<app-details
+  (close)="closeDetailsModal()"
+  *ngIf="showDetailsModal"
+  [boat]="selectedBoat"
+  [show]="showDetailsModal"
+>
+</app-details>
+
+<app-create
+  (cancel)="closeCreateModal()"
+  (confirm)="openSuccessCreateToast()"
+  *ngIf="showCreateModal"
+>
+</app-create>
+
+<app-update
+  (cancel)="closeUpdateModal()"
+  (confirm)="onSuccessUpdate()"
+  *ngIf="showUpdateModal"
+  [boat]="selectedBoat"
+>
+</app-update>
+

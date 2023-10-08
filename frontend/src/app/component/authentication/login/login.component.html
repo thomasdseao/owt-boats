@@ -1,0 +1,66 @@
+<div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+  <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+    <img alt="OWT Boat" class="mx-auto h-20 w-auto" src="../../../../assets/img/logo.png">
+    <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Sign in to your account</h2>
+  </div>
+
+  <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+    <div *ngIf="errorMessage$ | async"
+         class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+      {{ errorMessage$ | async }}
+    </div>
+    <form (submit)="login()" [formGroup]="loginForm" class="space-y-6">
+      <div>
+        <label class="block text-sm font-medium leading-6 text-gray-900" for="email">Email address</label>
+        <div class="mt-2">
+          <input
+            [class.border-green-500]="loginForm.get('email')?.dirty && loginForm.get('email')?.valid"
+            [class.border-red-500]="loginForm.get('email')?.dirty && !loginForm.get('email')?.valid"
+            autocomplete="email"
+            class="px-4 block w-full border-0 rounded-md py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            formControlName="email"
+            id="email"
+            name="email"
+            required
+            type="email"
+          >
+        </div>
+      </div>
+
+      <div>
+        <div class="flex items-center justify-between">
+          <label class="block text-sm font-medium leading-6 text-gray-900" for="password">Password</label>
+        </div>
+        <div class="mt-2">
+          <input
+            [class.border-green-500]="loginForm.get('password')?.dirty && loginForm.get('password')?.valid"
+            [class.border-red-500]="loginForm.get('password')?.dirty && !loginForm.get('password')?.valid"
+            autocomplete="current-password"
+            class="px-4 block w-full border-0 rounded-md py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            formControlName="password"
+            id="password"
+            name="password"
+            required
+            type="password"
+          >
+        </div>
+      </div>
+
+      <div>
+        <button
+          [class.cursor-not-allowed]="!loginForm.valid"
+          [class.opacity-50]="!loginForm.valid"
+          [disabled]="!loginForm.valid"
+          class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          type="submit">
+          <div class="flex items-center justify-center h-6">
+            <div *ngIf="isLoading$ | async" class="spinner"></div>
+            <ng-container *ngIf="{loading: isLoading$ | async} as data">
+              <span *ngIf="!data.loading">Sign in</span>
+            </ng-container>
+          </div>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

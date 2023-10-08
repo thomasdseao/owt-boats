@@ -1,0 +1,42 @@
+version: '3.7'
+services:
+  db:
+    image: mariadb:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: starterpassword
+      MYSQL_DATABASE: owt
+      MYSQL_USER: owt
+      MYSQL_PASSWORD: starterpassword
+    ports:
+      - "1339:3306"
+    networks:
+      - owtnetwork
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      timeout: 20s
+      retries: 10
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "1337:80"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - owtnetwork
+
+  backend:
+    build: ./backend
+    ports:
+      - "1338:1338"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - owtnetwork
+
+networks:
+  owtnetwork:
+    driver: bridge

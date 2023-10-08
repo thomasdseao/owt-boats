@@ -1,0 +1,7 @@
+.idea
+.vscode
+.git
+.mvn
+node_modules
+.DS_Store
+backend/lib
